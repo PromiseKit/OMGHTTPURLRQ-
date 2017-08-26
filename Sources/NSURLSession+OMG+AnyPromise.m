@@ -11,7 +11,7 @@
 #import <Foundation/NSURL.h>
 #import "PMKOMGHTTPURLRQ.h"
 
-#if !COCOAPODS
+#if !PMKCocoaPods
 #import <PMKFoundation/NSURLSession+AnyPromise.h>
 #else
 #import <PromiseKit/NSURLSession+AnyPromise.h>

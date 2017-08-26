@@ -12,8 +12,10 @@ class NSURLSessionTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
-        URLSession.shared.GET("http://example.com").asDictionary().then { rsp -> Void in
-            XCTAssertEqual(json, rsp)
+        URLSession.shared.GET("http://example.com").flatMap {
+            try JSONSerialization.jsonObject(with: $0.data)
+        }.done {
+            XCTAssertEqual(json, $0 as? NSDictionary)
             ex.fulfill()
         }
         waitForExpectations(timeout: 1)
@@ -21,7 +23,7 @@ class NSURLSessionTests: XCTestCase {
 
     func test2() {
 
-        // test that URLDataPromise chains thens
+        // test that Promise<Data> chains thens
         // this test because I don’t trust the Swift compiler
 
         let dummy = ("fred" as NSString).data(using: String.Encoding.utf8.rawValue)!
@@ -32,11 +34,12 @@ class NSURLSessionTests: XCTestCase {
 
         let ex = expectation(description: "")
 
-        after(interval: 0.1).then {
+        after(seconds: 0.1).then {
             URLSession.shared.GET("http://example.com")
-        }.then { x -> Void in
-            XCTAssertEqual(x, dummy)
-        }.then(execute: ex.fulfill)
+        }.done {
+            XCTAssertEqual($0.data, dummy)
+            ex.fulfill()
+        }
 
         waitForExpectations(timeout: 1)
     }
