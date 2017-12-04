@@ -1,0 +1,4 @@
+github "AliSoftware/OHHTTPStubs" "6.0.0"
+github "PromiseKit/Foundation" "2.0.0"
+github "mxcl/OMGHTTPURLRQ" "3.2.2"
+github "mxcl/PromiseKit" "5.0.0"
