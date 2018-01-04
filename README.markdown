@@ -28,7 +28,7 @@ URLSession.shared.DELETE(url).asString().then { string -> Void in
 ## CocoaPods
 
 ```ruby
-pod "PromiseKit/OMGHTTPURLRQ" ~> 4.0
+pod "PromiseKit/OMGHTTPURLRQ", "~> 4.0"
 ```
 
 The extensions are built into `PromiseKit.framework` thus nothing else is needed.
