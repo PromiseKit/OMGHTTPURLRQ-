@@ -41,7 +41,7 @@ extension URLSession {
      - Returns: A promise that represents the GET request.
      - SeeAlso: `URLDataPromise`
      */
-    public func GET(_ url: String, query: [NSObject: AnyObject]? = nil) -> URLDataPromise {
+    public func GET(_ url: String, query: [String: Any]? = nil) -> URLDataPromise {
         return start(try OMGHTTPURLRQ.get(url, query) as URLRequest)
     }
 
@@ -64,7 +64,7 @@ extension URLSession {
      - Returns: A promise that represents the POST request.
      - SeeAlso: `URLDataPromise`
      */
-    public func POST(_ url: String, formData: [NSObject: AnyObject]? = nil) -> URLDataPromise {
+    public func POST(_ url: String, formData: [String: Any]? = nil) -> URLDataPromise {
         return start(try OMGHTTPURLRQ.post(url, formData) as URLRequest)
     }
 
@@ -106,7 +106,7 @@ extension URLSession {
      - Returns: A promise that represents the POST request.
      - SeeAlso: `URLDataPromise`
      */
-    public func POST(_ url: String, json: NSDictionary) -> URLDataPromise {
+    public func POST(_ url: String, json: [String: Any]? = nil) -> URLDataPromise {
         return start(try OMGHTTPURLRQ.post(url, json: json) as URLRequest)
     }
 
@@ -124,7 +124,7 @@ extension URLSession {
      - Returns: A promise that represents the PUT request.
      - SeeAlso: `URLDataPromise`
      */
-    public func PUT(_ url: String, json: NSDictionary? = nil) -> URLDataPromise {
+    public func PUT(_ url: String, json: [String: Any]? = nil) -> URLDataPromise {
         return start(try OMGHTTPURLRQ.put(url, json: json) as URLRequest)
     }
 
@@ -158,7 +158,7 @@ extension URLSession {
      - Returns: A promise that represents the PUT request.
      - SeeAlso: `URLDataPromise`
      */
-    public func PATCH(_ url: String, json: NSDictionary) -> URLDataPromise {
+    public func PATCH(_ url: String, json: [String: Any]? = nil) -> URLDataPromise {
         return start(try OMGHTTPURLRQ.patch(url, json: json) as URLRequest)
     }
 

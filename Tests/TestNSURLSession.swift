@@ -40,6 +40,28 @@ class NSURLSessionTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
+
+    func testSyntax() {
+        let json: NSDictionary = ["key1": "value1", "key2": ["value2A", "value2B"]]
+
+        OHHTTPStubs.stubRequests(passingTest: {
+            $0.url!.host == "example.com"
+        }, withStubResponse: { _ in
+            OHHTTPStubsResponse(jsonObject: json, statusCode: 200, headers: nil)
+        })
+
+        let p = URLSession.shared.GET("http://example.com", query: [
+            "1": 1,
+            "2": 2
+        ]).asDictionary()
+
+        let ex = expectation(description: "")
+        p.then { rsp -> Void in
+            XCTAssertEqual(json, rsp)
+            ex.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
     
     override func tearDown() {
         OHHTTPStubs.removeAllStubs()
