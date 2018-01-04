@@ -38,7 +38,7 @@ extension URLSession {
      - Parameter query: The parameters to be encoded as the query string for the GET request.
      - Returns: A promise that represents the GET request.
      */
-    public func GET(_ url: String, query: [NSObject: AnyObject]? = nil) -> Promise<(data: Data, response: URLResponse)> {
+    public func GET(_ url: String, query: [String: Any]? = nil) -> Promise<(data: Data, response: URLResponse)> {
         return start(try OMGHTTPURLRQ.get(url, query) as URLRequest)
     }
 
@@ -60,7 +60,7 @@ extension URLSession {
      - Parameter formData: The parameters to be form URL-encoded and passed as the POST body.
      - Returns: A promise that represents the POST request.
      */
-    public func POST(_ url: String, formData: [NSObject: AnyObject]? = nil) -> Promise<(data: Data, response: URLResponse)> {
+    public func POST(_ url: String, formData: [String: Any]? = nil) -> Promise<(data: Data, response: URLResponse)> {
         return start(try OMGHTTPURLRQ.post(url, formData) as URLRequest)
     }
 
@@ -101,7 +101,7 @@ extension URLSession {
      - Parameter json: The parameters to be JSON-encoded and passed as the POST body.
      - Returns: A promise that represents the POST request.
      */
-    public func POST(_ url: String, json: NSDictionary) -> Promise<(data: Data, response: URLResponse)> {
+    public func POST(_ url: String, json: [String: Any]? = nil) -> Promise<(data: Data, response: URLResponse)> {
         return start(try OMGHTTPURLRQ.post(url, json: json) as URLRequest)
     }
 
@@ -118,7 +118,7 @@ extension URLSession {
      - Parameter json: The parameters to be JSON-encoded and passed as the PUT body.
      - Returns: A promise that represents the PUT request.
      */
-    public func PUT(_ url: String, json: NSDictionary? = nil) -> Promise<(data: Data, response: URLResponse)> {
+    public func PUT(_ url: String, json: [String: Any]? = nil) -> Promise<(data: Data, response: URLResponse)> {
         return start(try OMGHTTPURLRQ.put(url, json: json) as URLRequest)
     }
 
@@ -150,7 +150,7 @@ extension URLSession {
      - Parameter json: The JSON parameters to encode as the PATCH body.
      - Returns: A promise that represents the PUT request.
      */
-    public func PATCH(_ url: String, json: NSDictionary) -> Promise<(data: Data, response: URLResponse)> {
+    public func PATCH(_ url: String, json: [String: Any]? = nil) -> Promise<(data: Data, response: URLResponse)> {
         return start(try OMGHTTPURLRQ.patch(url, json: json) as URLRequest)
     }
 
