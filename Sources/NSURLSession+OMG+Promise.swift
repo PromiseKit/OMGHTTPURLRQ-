@@ -15,7 +15,7 @@ import PromiseKit
 
     import PromiseKit
 
- We provide convenience categories for the `NSURLSession.shared`, or
+ We provide convenience categories for the `URLSession.shared`, or
  an instance method `promise`. If you need more complicated behavior
  we recommend wrapping that usage in a `Promise` initializer.
 */
@@ -23,7 +23,7 @@ extension URLSession {
     /**
      Makes a **GET** request to the provided URL.
 
-         let p = NSURLSession.GET("http://example.com", query: ["foo": "bar"])
+         let p = URLSession.shared.GET("http://example.com", query: ["foo": "bar"])
          p.then { data -> Void  in
              //…
          }
@@ -52,7 +52,7 @@ extension URLSession {
 
          let url = "http://jsonplaceholder.typicode.com/posts"
          let params = ["title": "foo", "body": "bar", "userId": 1]
-         NSURLSession.POST(url, formData: params).asDictionary().then { json -> Void  in
+         URLSession.shared.POST(url, formData: params).asDictionary().then { json -> Void  in
              //…
          }
 
@@ -71,7 +71,7 @@ extension URLSession {
         let imgData = Data(contentsOfFile: "image.png")
         formData.addFile(imgdata, parameterName: "file1", filename: "myimage1.png", contentType: "image/png")
 
-        NSURLSession.POST(url, multipartFormData: formData).then { data in
+        URLSession.shared.POST(url, multipartFormData: formData).then { data in
             //…
         }
 
@@ -93,7 +93,7 @@ extension URLSession {
 
          let url = "http://jsonplaceholder.typicode.com/posts"
          let params = ["title": "foo", "body": "bar", "userId": 1]
-         NSURLSession.POST(url, json: params).asDictionary().then { json -> Void  in
+         URLSession.shared.POST(url, json: params).asDictionary().then { json -> Void  in
              //…
          }
 
@@ -110,7 +110,7 @@ extension URLSession {
 
          let url = "http://jsonplaceholder.typicode.com/posts"
          let params = ["title": "foo", "body": "bar", "userId": 1]
-         NSURLSession.PUT(url, json: params).asDictionary().then { json -> Void  in
+         URLSession.shared.PUT(url, json: params).asDictionary().then { json -> Void  in
              //…
          }
 
@@ -127,7 +127,7 @@ extension URLSession {
      parameters.
 
          let url = "http://jsonplaceholder.typicode.com/posts/1"
-         NSURLSession.DELETE(url).then.asDictionary() { json -> Void in
+         URLSession.shared.DELETE(url).then.asDictionary() { json -> Void in
              //…
          }
 
