@@ -28,7 +28,7 @@ URLSession.shared.DELETE(url).asString().then { string -> Void in
 ## CocoaPods
 
 ```ruby
-pod "PromiseKit/OMGHTTPURLRQ", "~> 4.0"
+pod "PromiseKit/OMGHTTPURLRQ", "~> 6.0"
 ```
 
 The extensions are built into `PromiseKit.framework` thus nothing else is needed.
@@ -36,7 +36,7 @@ The extensions are built into `PromiseKit.framework` thus nothing else is needed
 ## Carthage
 
 ```ruby
-github "PromiseKit/OMGHTTPURLRQ-" ~> 1.0
+github "PromiseKit/OMGHTTPURLRQ-" ~> 3.0
 ```
 
 The extensions are built into their own framework:
