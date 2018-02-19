@@ -12,7 +12,7 @@ class NSURLSessionTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
-        URLSession.shared.GET("http://example.com").flatMap {
+        URLSession.shared.GET("http://example.com").compactMap {
             try JSONSerialization.jsonObject(with: $0.data)
         }.done {
             XCTAssertEqual(json, $0 as? NSDictionary)
@@ -59,7 +59,7 @@ class NSURLSessionTests: XCTestCase {
         ])
 
         let ex = expectation(description: "")
-        p.flatMap {
+        p.compactMap {
             try JSONSerialization.jsonObject(with: $0.data)
         }.done {
             XCTAssertEqual(json, $0 as? NSDictionary)
