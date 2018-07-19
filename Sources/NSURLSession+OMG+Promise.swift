@@ -1,6 +1,7 @@
 import OMGHTTPURLRQ
 import Foundation
 #if !PMKCocoaPods
+import PMKCancel
 import PMKFoundation
 import PromiseKit
 #endif
@@ -168,3 +169,156 @@ extension URLSession {
         }
     }
 }
+
+//////////////////////////////////////////////////////////// Cancellation
+
+extension URLSession {
+    /**
+     Makes a cancellable **GET** request to the provided URL.
+
+         let p = URLSession.shared.GET("http://example.com", query: ["foo": "bar"])
+         p.then { data -> Void  in
+             //…
+         }
+         p.asImage().then { image -> Void  in
+            //…
+         }
+         p.asDictionary().then { json -> Void  in
+            //…
+         }
+
+     - Parameter url: The URL to request.
+     - Parameter query: The parameters to be encoded as the query string for the GET request.
+     - Returns: A cancellable promise that represents the GET request.
+     */
+    public func GETCC(_ url: String, query: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.get(url, query) as URLRequest)
+    }
+
+    /**
+     Makes a cancellable POST request to the provided URL passing form URL encoded
+     parameters.
+
+     Form URL-encoding is the standard way to POST on the Internet, so
+     probably this is what you want. If it doesn’t work, try the `+POST:JSON`
+     variant.
+
+         let url = "http://jsonplaceholder.typicode.com/posts"
+         let params = ["title": "foo", "body": "bar", "userId": 1]
+         URLSession.shared.POST(url, formData: params).asDictionary().then { json -> Void  in
+             //…
+         }
+
+     - Parameter url: The URL to request.
+     - Parameter formData: The parameters to be form URL-encoded and passed as the POST body.
+     - Returns: A cancellable promise that represents the POST request.
+     */
+    public func POSTCC(_ url: String, formData: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.post(url, formData) as URLRequest)
+    }
+
+    /**
+     Makes a cancellable POST request to the provided URL passing multipart form-data.
+
+        let formData = OMGMultipartFormData()
+        let imgData = Data(contentsOfFile: "image.png")
+        formData.addFile(imgdata, parameterName: "file1", filename: "myimage1.png", contentType: "image/png")
+
+        URLSession.shared.POST(url, multipartFormData: formData).then { data in
+            //…
+        }
+
+     - Parameter url: The URL to request.
+     - Parameter multipartFormData: The parameters to be multipart form-data encoded and passed as the POST body.
+     - Returns: A cancellable promise that represents the POST request.
+     - SeeAlso: [https://github.com/mxcl/OMGHTTPURLRQ](OMGHTTPURLRQ)
+     */
+    public func POSTCC(_ url: String, multipartFormData: OMGMultipartFormData) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.post(url, multipartFormData) as URLRequest)
+    }
+
+    /**
+     Makes a cancellable POST request to the provided URL passing JSON encoded
+     parameters.
+
+     Most web servers nowadays support POST with either JSON or form
+     URL-encoding. If in doubt try form URL-encoded parameters first.
+
+         let url = "http://jsonplaceholder.typicode.com/posts"
+         let params = ["title": "foo", "body": "bar", "userId": 1]
+         URLSession.shared.POST(url, json: params).asDictionary().then { json -> Void  in
+             //…
+         }
+
+     - Parameter url: The URL to request.
+     - Parameter json: The parameters to be JSON-encoded and passed as the POST body.
+     - Returns: A cancellable promise that represents the POST request.
+     */
+    public func POSTCC(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.post(url, json: json) as URLRequest)
+    }
+
+    /**
+     Makes a cancellable PUT request to the provided URL passing JSON encoded parameters.
+
+         let url = "http://jsonplaceholder.typicode.com/posts"
+         let params = ["title": "foo", "body": "bar", "userId": 1]
+         URLSession.shared.PUT(url, json: params).asDictionary().then { json -> Void  in
+             //…
+         }
+
+     - Parameter url: The URL to request.
+     - Parameter json: The parameters to be JSON-encoded and passed as the PUT body.
+     - Returns: A cancellable promise that represents the PUT request.
+     */
+    public func PUTCC(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.put(url, json: json) as URLRequest)
+    }
+
+    /**
+     Makes a cancellable DELETE request to the provided URL passing form URL-encoded
+     parameters.
+
+         let url = "http://jsonplaceholder.typicode.com/posts/1"
+         URLSession.shared.DELETE(url).then.asDictionary() { json -> Void in
+             //…
+         }
+
+     - Parameter url: The URL to request.
+     - Returns: A cancellable promise that represents the PUT request.
+     */
+    public func DELETECC(_ url: String) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.delete(url, nil) as URLRequest)
+    }
+
+    /**
+     Makes a cancellable PATCH request to the provided URL passing the provided JSON parameters.
+
+         let url = "http://jsonplaceholder.typicode.com/posts/1"
+         let params = ["foo": "bar"]
+         NSURLConnection.PATCH(url, json: params).asDictionary().then { json -> Void in
+             //…
+         }
+     - Parameter url: The URL to request.
+     - Parameter json: The JSON parameters to encode as the PATCH body.
+     - Returns: A cancellable promise that represents the PUT request.
+     */
+    public func PATCHCC(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return startCC(try OMGHTTPURLRQ.patch(url, json: json) as URLRequest)
+    }
+
+    private func startCC(_ body: @autoclosure () throws -> URLRequest) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        do {
+            var request = try body()
+
+            if request.value(forHTTPHeaderField: "User-Agent") == nil {
+                request.setValue(OMGUserAgent(), forHTTPHeaderField: "User-Agent")
+            }
+
+            return dataTaskCC(.promise, with: request)
+        } catch {
+            return CancellablePromise(error: error)
+        }
+    }
+}
+
