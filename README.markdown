@@ -1,3 +1,9 @@
+# DEPRECATED
+
+Use PMKFoundation or PMKAlamofire, the promises provided by this repository are minimal
+and add little value over just using OMG by itself and passing its URLRequests to
+URLSession manually.
+
 # PromiseKit OMGHTTPURLRQ Extensions ![Build Status]
 
 This project provides convenience methods on NSURLSession using [OMGHTTPURLRQ].
