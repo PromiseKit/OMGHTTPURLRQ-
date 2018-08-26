@@ -190,8 +190,8 @@ extension URLSession {
      - Parameter query: The parameters to be encoded as the query string for the GET request.
      - Returns: A cancellable promise that represents the GET request.
      */
-    public func GETCC(_ url: String, query: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.get(url, query) as URLRequest)
+    public func cancellableGET(_ url: String, query: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.get(url, query) as URLRequest)
     }
 
     /**
@@ -212,8 +212,8 @@ extension URLSession {
      - Parameter formData: The parameters to be form URL-encoded and passed as the POST body.
      - Returns: A cancellable promise that represents the POST request.
      */
-    public func POSTCC(_ url: String, formData: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.post(url, formData) as URLRequest)
+    public func cancellablePOST(_ url: String, formData: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.post(url, formData) as URLRequest)
     }
 
     /**
@@ -232,8 +232,8 @@ extension URLSession {
      - Returns: A cancellable promise that represents the POST request.
      - SeeAlso: [https://github.com/mxcl/OMGHTTPURLRQ](OMGHTTPURLRQ)
      */
-    public func POSTCC(_ url: String, multipartFormData: OMGMultipartFormData) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.post(url, multipartFormData) as URLRequest)
+    public func cancellablePOST(_ url: String, multipartFormData: OMGMultipartFormData) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.post(url, multipartFormData) as URLRequest)
     }
 
     /**
@@ -253,8 +253,8 @@ extension URLSession {
      - Parameter json: The parameters to be JSON-encoded and passed as the POST body.
      - Returns: A cancellable promise that represents the POST request.
      */
-    public func POSTCC(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.post(url, json: json) as URLRequest)
+    public func cancellablePOST(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.post(url, json: json) as URLRequest)
     }
 
     /**
@@ -270,8 +270,8 @@ extension URLSession {
      - Parameter json: The parameters to be JSON-encoded and passed as the PUT body.
      - Returns: A cancellable promise that represents the PUT request.
      */
-    public func PUTCC(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.put(url, json: json) as URLRequest)
+    public func cancellablePUT(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.put(url, json: json) as URLRequest)
     }
 
     /**
@@ -286,8 +286,8 @@ extension URLSession {
      - Parameter url: The URL to request.
      - Returns: A cancellable promise that represents the PUT request.
      */
-    public func DELETECC(_ url: String) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.delete(url, nil) as URLRequest)
+    public func cancellableDELETE(_ url: String) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.delete(url, nil) as URLRequest)
     }
 
     /**
@@ -302,11 +302,11 @@ extension URLSession {
      - Parameter json: The JSON parameters to encode as the PATCH body.
      - Returns: A cancellable promise that represents the PUT request.
      */
-    public func PATCHCC(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return startCC(try OMGHTTPURLRQ.patch(url, json: json) as URLRequest)
+    public func cancellablePATCH(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
+        return cancellableStart(try OMGHTTPURLRQ.patch(url, json: json) as URLRequest)
     }
 
-    private func startCC(_ body: @autoclosure () throws -> URLRequest) -> CancellablePromise<(data: Data, response: URLResponse)> {
+    private func cancellableStart(_ body: @autoclosure () throws -> URLRequest) -> CancellablePromise<(data: Data, response: URLResponse)> {
         do {
             var request = try body()
 
@@ -314,7 +314,7 @@ extension URLSession {
                 request.setValue(OMGUserAgent(), forHTTPHeaderField: "User-Agent")
             }
 
-            return dataTaskCC(.promise, with: request)
+            return cancellableDataTask(.promise, with: request)
         } catch {
             return CancellablePromise(error: error)
         }

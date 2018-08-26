@@ -84,7 +84,7 @@ extension NSURLSessionTests {
         }
 
         let ex = expectation(description: "")
-        URLSession.shared.GETCC("http://example.com").compactMap {
+        URLSession.shared.cancellableGET("http://example.com").compactMap {
             XCTFail()
             try JSONSerialization.jsonObject(with: $0.data)
         }.done {
@@ -109,8 +109,8 @@ extension NSURLSessionTests {
 
         let ex = expectation(description: "")
 
-        afterCC(seconds: 0.1).then { () -> CancellablePromise<(data: Data, response: URLResponse)> in
-            let p = URLSession.shared.GETCC("http://example.com")
+        cancellable(after(seconds: 0.1)).then { () -> CancellablePromise<(data: Data, response: URLResponse)> in
+            let p = URLSession.shared.cancellableGET("http://example.com")
             p.cancel()
             return p
         }.done {
@@ -132,7 +132,7 @@ extension NSURLSessionTests {
             OHHTTPStubsResponse(jsonObject: json, statusCode: 200, headers: nil)
         })
 
-        let p = URLSession.shared.GETCC("http://example.com", query: [
+        let p = URLSession.shared.cancellableGET("http://example.com", query: [
             "1": 1,
             "2": 2
         ])
