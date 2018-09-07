@@ -199,6 +199,7 @@
 				OMGHTTPURLRQ,
 				OHHTTPStubs,
 				PMKFoundation,
+				PMKCancel,
 			);
 			name = "Embed Carthage Frameworks";
 			outputPaths = (
