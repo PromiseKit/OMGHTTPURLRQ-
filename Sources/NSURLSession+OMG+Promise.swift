@@ -169,7 +169,7 @@ extension URLSession {
     }
 }
 
-//////////////////////////////////////////////////////////// Cancellation
+//////////////////////////////////////////////////////////// Cancellable wrappers
 
 extension URLSession {
     /**
@@ -191,7 +191,7 @@ extension URLSession {
      - Returns: A cancellable promise that represents the GET request.
      */
     public func cancellableGET(_ url: String, query: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.get(url, query) as URLRequest)
+        return cancellable(GET(url, query: query))
     }
 
     /**
@@ -213,7 +213,7 @@ extension URLSession {
      - Returns: A cancellable promise that represents the POST request.
      */
     public func cancellablePOST(_ url: String, formData: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.post(url, formData) as URLRequest)
+        return cancellable(POST(url, formData: formData))
     }
 
     /**
@@ -233,7 +233,7 @@ extension URLSession {
      - SeeAlso: [https://github.com/mxcl/OMGHTTPURLRQ](OMGHTTPURLRQ)
      */
     public func cancellablePOST(_ url: String, multipartFormData: OMGMultipartFormData) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.post(url, multipartFormData) as URLRequest)
+        return cancellable(POST(url, multipartFormData: multipartFormData))
     }
 
     /**
@@ -254,7 +254,7 @@ extension URLSession {
      - Returns: A cancellable promise that represents the POST request.
      */
     public func cancellablePOST(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.post(url, json: json) as URLRequest)
+        return cancellable(POST(url, json: json))
     }
 
     /**
@@ -271,7 +271,7 @@ extension URLSession {
      - Returns: A cancellable promise that represents the PUT request.
      */
     public func cancellablePUT(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.put(url, json: json) as URLRequest)
+        return cancellable(PUT(url, json: json))
     }
 
     /**
@@ -287,7 +287,7 @@ extension URLSession {
      - Returns: A cancellable promise that represents the PUT request.
      */
     public func cancellableDELETE(_ url: String) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.delete(url, nil) as URLRequest)
+        return cancellable(DELETE(url))
     }
 
     /**
@@ -303,21 +303,6 @@ extension URLSession {
      - Returns: A cancellable promise that represents the PUT request.
      */
     public func cancellablePATCH(_ url: String, json: [String: Any]? = nil) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        return cancellableStart(try OMGHTTPURLRQ.patch(url, json: json) as URLRequest)
-    }
-
-    private func cancellableStart(_ body: @autoclosure () throws -> URLRequest) -> CancellablePromise<(data: Data, response: URLResponse)> {
-        do {
-            var request = try body()
-
-            if request.value(forHTTPHeaderField: "User-Agent") == nil {
-                request.setValue(OMGUserAgent(), forHTTPHeaderField: "User-Agent")
-            }
-
-            return cancellableDataTask(.promise, with: request)
-        } catch {
-            return CancellablePromise(error: error)
-        }
+        return cancellable(PATCH(url, json: json))
     }
 }
-
