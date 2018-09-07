@@ -1,4 +1,4 @@
 github "AliSoftware/OHHTTPStubs" "6.1.0"
-github "dougzilla32/Foundation" "fd1d66c24d9ac6b6878603e16356d8c9cac46dc8"
-github "dougzilla32/PromiseKit" "5069bdc1b10847d47f5fdbe3accb623b3b1908a3"
+github "dougzilla32/Foundation" "194f0512d91ff311223d094fdbe80d04d1a57af9"
+github "dougzilla32/PromiseKit" "dcf77e0afe55e3d18da9a2a5bda28cdf1adcb5a9"
 github "mxcl/OMGHTTPURLRQ" "3.2.5"
